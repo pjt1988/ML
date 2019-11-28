@@ -1,3 +1,6 @@
+#taken from
+#https://www.analyticsvidhya.com/blog/2018/02/the-different-methods-deal-text-data-predictive-python/
+
 import pandas as pd
 from nltk.corpus import stopwords
 stop = stopwords.words('english')
