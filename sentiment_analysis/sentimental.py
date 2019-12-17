@@ -44,6 +44,7 @@ def train_set(cv, X, X_test, training_data, hyperparm):
 
     max_accuracy = 0.0
     accuracy = -1.0
+    #optimize hyper parameter?
     if hyperparm == 0:
         for cc in numpy.arange(0.01,1.0,0.01):
             lr = LogisticRegression(C=cc)
@@ -93,6 +94,7 @@ def main():
             print "ERROR Failure testing..."
             exit(1)
 
+    #one hot encoding..
     cv = CountVectorizer(binary=True)
     cv.fit(train_data)
     X = cv.transform(train_data)
@@ -107,11 +109,6 @@ def main():
         X_file = cv.transform(sampletext)
         print("Predicting %i positivity (0 - bad, 1 - great) of sample %s " % (trained_model.predict(X_file), options.file))
         print("Predicting probability (ie how positive) - %.5f / 10.0  " % (trained_model.predict_proba(X_file)[0][1]*10.0))
-
-
-
-
-
 
 
 main()
