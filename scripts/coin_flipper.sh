@@ -10,7 +10,6 @@ do
     SUM1=$(echo "$SUM + $TEMP" | bc)
     SUM=$SUM1
   done
-  echo $SUM
   if [ $SUM -gt 1 ]; then
     echo "Series $i - True!"
   else
