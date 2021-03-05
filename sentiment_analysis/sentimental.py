@@ -28,12 +28,12 @@ def prep_data_from_file(fname):
             REPLACE_WITH_SPACE.sub(" ", line)
             text.append(line)
     except IOError:
-        print "ERROR parsing file..."
+        print("ERROR parsing file...")
         return []
-    print "now doing regex.."
+    #print "now doing regex.."
     #text = [REPLACE_NO_SPACE.sub("", line.lower()) for line in text]
     #text = [REPLACE_WITH_SPACE.sub(" ", line) for line in text]
-    print "done regex.."
+    #print "done regex.."
     
     return text
 
@@ -82,16 +82,16 @@ def main():
     if options.trainingset != '':
         train_data = prep_data_from_file(options.trainingset)
         if train_data == []:
-            print "ERROR Failure training.."
+            print("ERROR Failure training..")
             exit(1)
     else:
-        print "ERROR No training set specified..."
+        print("ERROR No training set specified...")
         exit(1)
     
     if options.testset != '':
         test_data = prep_data_from_file(options.testset)
         if test_data == []:
-            print "ERROR Failure testing..."
+            print("ERROR Failure testing...")
             exit(1)
 
     #one hot encoding..
@@ -107,8 +107,21 @@ def main():
     if options.file != '':
         sampletext = prep_data_from_file(options.file)
         X_file = cv.transform(sampletext)
-        print("Predicting %i positivity (0 - bad, 1 - great) of sample %s " % (trained_model.predict(X_file), options.file))
-        print("Predicting probability (ie how positive) - %.5f / 10.0  " % (trained_model.predict_proba(X_file)[0][1]*10.0))
+        result = trained_model.predict_proba(X_file)
+        print("Predicting positivity (0 = negative, 10 = positive)")
+        for res in range(len(result)):
+            pos = result[res][1]*10.0
+            if(pos > 7.0):
+                print("\nItem %i:\n   %sMostly positive sentiment (%.5f / 10.0) " % (res, sampletext[res],pos))
+            elif(pos > 4.0):
+                print("\nItem %i:\n   %sNeutral sentiment (%.5f / 10.0) " % (res,sampletext[res],pos))
+            else:
+                print("\nItem %i:\n   %sMostly negative sentiment (%.5f / 10.0) " % (res,sampletext[res],pos))
+
+
+
+        #print("Predicting %i positivity (0 - bad, 10 - great) of sample %s " % (trained_model.predict(X_file), options.file))
+        #print("Predicting probability (ie how positive) - %.5f / 10.0  " % (trained_model.predict_proba(X_file)[0][1]*10.0))
 
 
 main()
